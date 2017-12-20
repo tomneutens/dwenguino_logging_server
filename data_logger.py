@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """Module for Blockly data logging."""
 from pymongo import MongoClient
 from http.server import BaseHTTPRequestHandler, HTTPServer
