@@ -75,4 +75,51 @@ wget https://github.com/google/blockly-games/raw/offline/generated/blockly-games
 unzip blockly-games-nl.zip
 sudo -i -u ${SUDO_USER} mv /root/blockly-games /home/${SUDO_USER}/Desktop/
 
+# Install python pip
+apt install -y python3-pip
+pip3 install pymongo
 
+# Install mongodb
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+apt-get update
+apt-get install -y mongodb-org
+touch /etc/systemd/system/mongod.service
+bash -c 'echo "[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/mongod.service'
+
+
+mkdir -p /data/db
+sudo chmod -R 755 /data/db
+
+# Start mongo service at statup
+systemctl enable mongod.service
+
+#get the logging script
+wget --continue https://raw.githubusercontent.com/tomneutens/dwenguino_logging_server/master/data_logger.py
+sudo mv data_logger.py /bin/data_logger.py
+sudo chmod 777 /bin/data_logger.py
+
+sudo touch /lib/systemd/blockly_logging_startup.service
+
+# Configure logging as service which starts at startup
+sudo bash 'echo "[Unit]
+Description=Blockly logger
+
+[Service]
+Type=simple
+ExecStart=/bin/data_logger.py
+
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/blockly_logging_startup.service'
+
+sudo systemctl daemon-reload
+sudo systemctl enable blockly_logging_startup.service
