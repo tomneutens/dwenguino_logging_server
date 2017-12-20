@@ -116,10 +116,45 @@ Description=Blockly logger
 
 [Service]
 Type=simple
+WorkingDirectory=/home/dwengo/
+User=dwengo
 ExecStart=/bin/data_logger.py
+Restart=always
 
 [Install]
 WantedBy=multi-user.target" > /lib/systemd/blockly_logging_startup.service'
 
 sudo systemctl daemon-reload
 sudo systemctl enable blockly_logging_startup.service
+
+
+# Dowload the assingments
+
+wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/workshop1.zip
+unzip workshop1.zip -d /home/dwengo/ws1
+rm workshop1.zip
+
+# Configure data wipe service after restart
+wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/dwengo_reset.sh
+sudo mv dwengo_reset.sh /bin/dwengo_reset.sh
+sudo chmod 777 /bin/dwengo_reset.sh
+rm dwengo_reset.sh
+
+sudo touch /lib/systemd/blockly_reset.service
+sudo bash 'echo "
+[Unit]
+Description=Blockly reset files
+
+[Service]
+Type=simple
+WorkingDirectory=/home/dwengo/
+User=dwengo
+ExecStart=/bin/dwengo_reset.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/blockly_reset.service'
+
+sudo sytemctl daemon-reload
+sudo systemctl enable blockly_reset.service
+
