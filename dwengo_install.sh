@@ -73,7 +73,7 @@ chmod +x /home/${SUDO_USER}/Desktop/Dwengo*.desktop
 # Google Blockly
 wget https://github.com/google/blockly-games/raw/offline/generated/blockly-games-nl.zip
 unzip blockly-games-nl.zip
-sudo -i -u ${SUDO_USER} mv /root/blockly-games /home/${SUDO_USER}/Desktop/
+sudo -i -u ${SUDO_USER} mv /root/blockly-games /home/dwengo/Desktop/
 
 # Install python pip
 apt install -y python3-pip
@@ -108,10 +108,10 @@ wget --continue https://raw.githubusercontent.com/tomneutens/dwenguino_logging_s
 sudo mv data_logger.py /bin/data_logger.py
 sudo chmod 777 /bin/data_logger.py
 
-sudo touch /lib/systemd/blockly_logging_startup.service
+sudo touch /lib/systemd/system/blockly_logging_startup.service
 
 # Configure logging as service which starts at startup
-sudo bash 'echo "[Unit]
+bash -c 'echo "[Unit]
 Description=Blockly logger
 
 [Service]
@@ -122,7 +122,7 @@ ExecStart=/bin/data_logger.py
 Restart=always
 
 [Install]
-WantedBy=multi-user.target" > /lib/systemd/blockly_logging_startup.service'
+WantedBy=multi-user.target" > /lib/systemd/system/blockly_logging_startup.service'
 
 sudo systemctl daemon-reload
 sudo systemctl enable blockly_logging_startup.service
@@ -138,23 +138,27 @@ rm workshop1.zip
 wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/dwengo_reset.sh
 sudo mv dwengo_reset.sh /bin/dwengo_reset.sh
 sudo chmod 777 /bin/dwengo_reset.sh
-rm dwengo_reset.sh
+sudo sed -i -e '$i \sh /bin/dwengo_reset.sh &\n' /etc/rc.local
 
-sudo touch /lib/systemd/blockly_reset.service
-sudo bash 'echo "
-[Unit]
-Description=Blockly reset files
 
-[Service]
-Type=simple
-WorkingDirectory=/home/dwengo/
-User=dwengo
-ExecStart=/bin/dwengo_reset.sh
-Restart=always
 
-[Install]
-WantedBy=multi-user.target" > /lib/systemd/blockly_reset.service'
+#sudo bash 'echo "sh /bin/dwengo_reset.sh" > /etc/rc.local'
 
-sudo sytemctl daemon-reload
-sudo systemctl enable blockly_reset.service
+#sudo touch /lib/systemd/system/blockly_reset.service
+#bash -c 'echo "
+#[Unit]
+#Description=Blockly reset files
+
+#[Service]
+#Type=simple
+#WorkingDirectory=/home/dwengo/
+#User=dwengo
+#ExecStart=/bin/dwengo_reset.sh
+#Restart=always
+
+#[Install]
+#WantedBy=multi-user.target" > /lib/systemd/system/blockly_reset.service'
+
+#sudo systemctl daemon-reload
+#sudo systemctl enable blockly_reset.service
 
