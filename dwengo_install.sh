@@ -35,10 +35,11 @@ apt-get purge -y modemmanager*
 
 # DwenguinoBlockly
 sudo -i -u ${SUDO_USER} mkdir -p ~/Arduino/tools
-wget --continue https://github.com/dwengovzw/Blockly-for-Dwenguino/raw/version2.2/bin/DwenguinoBlocklyArduinoPlugin.zip
+sudo rm -f DwenguinoBlocklyArduinoPlugin.zip
+wget https://github.com/dwengovzw/Blockly-for-Dwenguino/raw/version2.2/bin/DwenguinoBlocklyArduinoPlugin.zip
 unzip DwenguinoBlocklyArduinoPlugin.zip
-rm -rf /opt/arduino/tools/DwenguinoBlocklyArduinoPlugin
-mv DwenguinoBlocklyArduinoPlugin /opt/arduino/tools/
+sudo rm -Rf /opt/arduino/tools/DwenguinoBlocklyArduinoPlugin
+sudo mv DwenguinoBlocklyArduinoPlugin /opt/arduino/tools/
 
 # wallpaper
 wget http://ptr.be/dwengo/dwengo.jpg
@@ -131,10 +132,12 @@ sudo systemctl enable blockly_logging_startup.service
 # Dowload the assingments
 
 wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/workshop1.zip
+rm -f /home/dwengo/ws1/*
 unzip workshop1.zip -d /home/dwengo/ws1
 rm workshop1.zip
 
 wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/workshop2.zip
+rm -f /home/dwengo/ws2/*
 unzip workshop2.zip -d /home/dwengo/ws2
 rm workshop2.zip
 
