@@ -134,6 +134,10 @@ wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/maste
 unzip workshop1.zip -d /home/dwengo/ws1
 rm workshop1.zip
 
+wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/workshop2.zip
+unzip workshop2.zip -d /home/dwengo/ws2
+rm workshop2.zip
+
 # Configure data wipe service after restart
 wget --continue https://github.com/tomneutens/dwenguino_logging_server/raw/master/dwengo_reset.sh
 sudo mv dwengo_reset.sh /bin/dwengo_reset.sh
